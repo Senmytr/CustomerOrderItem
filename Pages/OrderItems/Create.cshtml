@@ -1,0 +1,81 @@
+﻿@page
+@model CustomerOrderItem.Pages.OrderItems.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Order Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="CustomerOrderItem1.OrderID" class="control-label">Order ID</label>
+                <select asp-for="CustomerOrderItem1.OrderID" class="form-control" asp-items="ViewBag.OrderID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerOrderItem1.CustomerID" class="control-label">Customer Name</label>
+                <input asp-for="CustomerOrderItem1.CustomerID" class="form-control" disabled value="" />
+
+                <span asp-validation-for="CustomerOrderItem1.CustomerID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomerOrderItem1.ProductID" class="control-label">Product Name</label>
+                <input asp-for="CustomerOrderItem1.ProductID" class="form-control" disabled value="" />
+
+                <span asp-validation-for="CustomerOrderItem1.ProductID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomerOrderItem1.Quantity" class="control-label"></label>
+                <input asp-for="CustomerOrderItem1.Quantity" class="form-control" />
+                <span asp-validation-for="CustomerOrderItem1.Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#ProductList").change(function () {
+            var selectedProductID = { productID: $("#ProductList").val() };
+            $.ajax({
+                url: '@Url.Action("GetProductData", "Home")',
+                type: 'Post',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(selectedProductID),
+                success: function (data) {
+                    if (data.success) {
+                        document.getElementById("ProductName").value = data.productName;
+                    }
+                    else {
+                        alert('invalid ID' + data.success);
+                    }
+                }
+            });
+        });
+    });
+    function Func() {
+        alert("hello!")
+    }
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
